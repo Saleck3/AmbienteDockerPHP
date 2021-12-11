@@ -1,39 +1,39 @@
-version: "1"
+version: "3.2"
 services:
   php:
     build: 
       context: './php/'
       args:
-       PHP_VERSION: ${PHP_VERSION:7.3}
+       PHP_VERSION: ${PHP_VERSION}
     networks:
       - backend
     volumes:
       - ${PROJECT_ROOT}/:/var/www/html/
       - ./php/php-ini-override.ini:/usr/local/etc/php/conf.d/99-overrides.ini
-    container_name: ${NOM_PHP:php}
+    container_name: ${PHP_NAME}
   apache:
     build:
       context: './apache/'
       args:
        APACHE_VERSION: ${APACHE_VERSION}
     depends_on:
-      - ${NOM_PHP:php}
-      - ${MYSQL_NAME:mysql}
+      - php
+      - mysql
     networks:
       - frontend
       - backend
     ports:
-      - "${HTTP_PORT:80}:80"
-      - "${FTP_PORT:21}:21"
-      - "${DEBUG_PORT:9001}:9001"
+      - "${HTTP_PORT}:80"
+      - "${FTP_PORT}:21"
+      - "${DEBUG_PORT}:9001"
     volumes:
       - ${PROJECT_ROOT}/:/var/www/html/
-    container_name: ${APACHE_NAME:apache}
+    container_name: ${APACHE_NAME}
   mysql:
     image: mysql:${MYSQL_VERSION:-latest}
     restart: always
     ports:
-      - "${3306:3306}:3306"
+      - "${MYSQL_PORT}:3306"
     volumes:
             - data:/var/lib/mysql
     networks:
@@ -43,7 +43,7 @@ services:
       MYSQL_DATABASE: "${DB_NAME}"
       MYSQL_USER: "${DB_USERNAME}"
       MYSQL_PASSWORD: "${DB_PASSWORD}"
-    container_name: ${MYSQL_NAME:mysql}
+    container_name: ${MYSQL_NAME}
 networks:
   frontend:
   backend:
