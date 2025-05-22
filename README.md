@@ -1,39 +1,31 @@
-# Introducción
+# Introduction
 
-Este repo es una copia del repositorio https://github.com/mzazon/PHP-apache-mysql-containerized el original es una demo generada para entender conceptos básicos de Docker levantando una aplicacion conocida (recomiendo leer el README original para entender como funciona la estructura de carpetas y los archivos de Docker)
+This repository generates a LAMP stack on a single container, replicating a common web server. Additionally, some PHP components such as gettext, composer, and php-zip have been added.
 
-Si bien este proyecto es muy similar en cuanto a la estructura de carpetas y funcionamiento, este repositorio esta pensado para usarse como espacio de desarrollo de PHP
+Its intended use is as a template for creating a development enviroment where you have everything necesary to run a PHP aplication, including frameworks like Symfony or Laravel
 
-Este repositorio genera una pila LAMP sobre un mismo contenedor, replicando un servidor web común
-Ademas, se agregaron algunos componentes de PHP como gettext, composer y php-zip
+# Usage
 
-
-# Instalación
-
-Para poder empezar a utilizar el ambiente de desarrollo es necesario tener Docker instalado y completar las variables dentro de .env
-
-Una vez completas, se debe ejecutar el archivo docker-compose.yml
+With docker and docker-compose running on the machine, run the docker-compose.yml file.
 
 ```
 docker-compose -f "docker-compose.yml" up -d --build
 ```
 
+By default, a site will start on port 80 and a MariaDB database in port 3306
 
-## Variables de entorno
-
-[Nombre Variable]=[Valor default]
-
-### versiónes de servicio
-Son las versiónes que se van a usar internamente, este proyecto no soporta mas de una versión para cada servicio
+## Variables
+### Service Versions
+These are the versions that will be used internally. This project does not support more than one version for each service.
 
 ```
-PHP_VERSION=7.3
+PHP_VERSION=8.3
 APACHE_VERSION=2.4.32
 MYSQL_VERSION=5.6
 ```
 
-### Nombres de imágenes
-Este es el nombre que va a tomar la imagen de Docker de cada servicio, si se requiere tener mas de un ambiente corriendo en la misma maquina, deben modificarse junto con los puertos habilitados
+### Image Names
+This is the name that the Docker image of each service will take. If you need to have more than one environment running on the same machine, these must be modified along with the enabled ports.
 
 ```
 PHP_NAME=php
@@ -41,35 +33,35 @@ APACHE_NAME=apache
 MYSQL_NAME=mysql
 ```
 
-### Nombre de la red
-Este nombre va a permitir a contenedores distintos dentro del mismo equipo utilizar los servicios de otro contenedor, necesario si se quiere tener una única instancia del servidor MySQL direccionable desde varios contenedores
+### Network Name
+This name will allow different containers within the same computer to use the services of another container. This is necessary if you want to have a single database server instance addressable from multiple containers.
 
 ```
-NETWORK_NAME=network
+NETWORK_NAME=local-network
 ```
 
-### Parámetros de MySQL
-Parámetros   a utilizar por el servidor de MySQL
+### Database Parameters
+Parameters to be used by the MariaDB server
 
 ```
 DB_ROOT_PASSWORD=rootpassword
 DB_NAME=local
 DB_USERNAME=dbuser
 DB_PASSWORD=password
-MYSQL_PORT=3306
+MARIA_DB_PORT=3306
 ```
 
-### Carpeta base
-Carpeta donde va a estar la base del servidor web, esta carpeta debe estar creada dentro del árbol de carpetas
+### Base Folder
+Folder where the webpage files will be located.
 
 ```
-PROJECT_ROOT=./public_html
+PROJECT_ROOT=./src
 ```
 
-### Puertos a utilizar por el servidor de apache
-Estos puertos deben modificarse si se requiere tener mas de un ambiente corriendo en la misma maquina, junto con los puertos habilitados
+### Ports to be used by the Apache server
+These ports must be modified if you need to have more than one environment running on the same machine, along with the enabled ports.
 
-El puerto de debug se puede utilizar para configurar xdebug
+The debug port can be used to configure xdebug
 
 ```
 HTTP_PORT=80
@@ -79,4 +71,4 @@ DEBUG_PORT=9001
 
 # Composer
 
-Este contenedor instalara el composer de PHP para ser utilizado en caso de necesidad, el comando composer puede ejecutarse a través de SSH dentro de la imagen
+It will be installed in the same image as PHP, The composer command can be run via SSH within the image's terminal.

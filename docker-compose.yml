@@ -46,14 +46,6 @@ services:
       MYSQL_USER: "${DB_USERNAME}"
       MYSQL_PASSWORD: "${DB_PASSWORD}"
 
-  composer:
-    container_name: ${COMPOSER_NAME}
-    image: composer:latest
-    volumes:
-      - ./src:/app
-    working_dir: /app
-    entrypoint: ["composer"]
-
 networks:
   frontend:
   backend:
